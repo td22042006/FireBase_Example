@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
   FirebaseFirestore db;
   Button btAdd, btShow;
-  EditText etName, etPhone;
+  EditText etTitle, etDescription, etImgCover;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     db = FirebaseFirestore.getInstance();
     btAdd = findViewById(R.id.btAdd);
     btShow = findViewById(R.id.btShow);
-    etName = findViewById(R.id.etName);
-    etPhone = findViewById(R.id.etPhone);
+    etTitle = findViewById(R.id.etTitle);
+    etDescription = findViewById(R.id.etDescription);
+    etImgCover = findViewById(R.id.etImgCover);
     btAdd.setOnClickListener(this);
     btShow.setOnClickListener(this);
   }
@@ -44,9 +45,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   public void onClick(View view) {
     if (view.getId() == R.id.btAdd) {
-      db.collection("users").add(new User(etName.getText().toString(), etPhone.getText().toString()));
-      etName.setText("");
-      etPhone.setText("");
+      String title = etTitle.getText().toString().trim();
+      String desc = etDescription.getText().toString().trim();
+      String img = etImgCover.getText().toString().trim();
+      if (img.isEmpty()) {
+        img = "https://raw.githubusercontent.com/td22042006/PhotoApp/master/images/sontung.jpg";
+      }
+
+      Article article = new Article(title, desc, img, 0);
+      db.collection("articles").add(article);
+
+      etTitle.setText("");
+      etDescription.setText("");
+      etImgCover.setText("");
     } else if (view.getId() == R.id.btShow) {
       Intent intent = new Intent(getBaseContext(), ShowDataActivity.class);
       startActivity(intent);
