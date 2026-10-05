@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       String desc = etDescription.getText().toString().trim();
       String img = etImgCover.getText().toString().trim();
       if (img.isEmpty()) {
-        img = "https://raw.githubusercontent.com/td22042006/PhotoApp/master/images/sontung.jpg";
+        img = "https://raw.githubusercontent.com/td22042006/FireBase_Example/main/images/sontung.jpg";
       }
 
       Article article = new Article(title, desc, img, 0);
