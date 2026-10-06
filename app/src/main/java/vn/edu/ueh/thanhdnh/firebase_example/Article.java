@@ -17,6 +17,11 @@ public class Article implements Serializable {
   }
 
   public Article(String title, String description, String imgCover, int views) {
+    this("", title, description, imgCover, views);
+  }
+
+  public Article(String id, String title, String description, String imgCover, int views) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.imgCover = imgCover;

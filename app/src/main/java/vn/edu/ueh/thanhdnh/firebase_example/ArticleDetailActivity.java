@@ -25,8 +25,10 @@ public class ArticleDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        TextView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
+        android.view.View btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         Article article = (Article) getIntent().getSerializableExtra("article");
 
@@ -35,33 +37,27 @@ public class ArticleDetailActivity extends AppCompatActivity {
             TextView tvTitle = findViewById(R.id.tvDetailTitle);
             TextView tvViews = findViewById(R.id.tvDetailViews);
             TextView tvContent = findViewById(R.id.tvDetailContent);
+            TextView tvDetailId = findViewById(R.id.tvDetailId);
 
             int newViews = article.getViews() + 1;
             article.setViews(newViews);
 
+            if (tvDetailId != null && article.getId() != null && !article.getId().isEmpty()) {
+                tvDetailId.setText("BÀI VIẾT #" + article.getId());
+            }
             tvTitle.setText(article.getTitle());
-            tvViews.setText("Views: " + newViews);
+            tvViews.setText(newViews + " lượt xem");
             tvContent.setText(article.getDescription());
 
-            // Tải ảnh qua Glide (hỗ trợ cả URL internet lẫn tên drawable)
+            // Tải ảnh trực tiếp từ URL Internet lưu trên Firebase
             String img = article.getImgCover();
             if (img != null && !img.trim().isEmpty()) {
-                int resId = getResources().getIdentifier(img, "drawable", getPackageName());
-                if (resId != 0) {
-                    Glide.with(this)
-                            .load(resId)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_cover)
-                            .error(R.drawable.ic_cover)
-                            .into(ivCover);
-                } else {
-                    Glide.with(this)
-                            .load(img)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_cover)
-                            .error(R.drawable.ic_cover)
-                            .into(ivCover);
-                }
+                Glide.with(this)
+                        .load(img.trim())
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_cover)
+                        .error(R.drawable.ic_cover)
+                        .into(ivCover);
             } else {
                 ivCover.setImageResource(R.drawable.ic_cover);
             }

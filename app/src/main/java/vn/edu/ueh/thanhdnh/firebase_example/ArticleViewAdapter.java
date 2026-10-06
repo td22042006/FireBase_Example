@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -36,34 +37,35 @@ public class ArticleViewAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
   @Override
   public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
     Article currentArticle = articles.get(position);
+    if (holder.getTxtId() != null) {
+      if (currentArticle.getId() != null && !currentArticle.getId().isEmpty()) {
+        holder.getTxtId().setVisibility(View.VISIBLE);
+        holder.getTxtId().setText("ID: " + currentArticle.getId());
+      } else {
+        holder.getTxtId().setVisibility(View.GONE);
+      }
+    }
     holder.getTxtTitle().setText(currentArticle.getTitle());
     holder.getTxtDescription().setText(currentArticle.getDescription());
+    if (holder.getTxtViews() != null) {
+      holder.getTxtViews().setText(currentArticle.getViews() + " xem");
+    }
 
-    // Tải ảnh đại diện qua Glide (hỗ trợ URL internet và drawable)
+    // Tải ảnh trực tiếp từ URL Internet lưu trên Firebase qua Glide
     String img = currentArticle.getImgCover();
     if (img != null && !img.trim().isEmpty()) {
-      int resId = holder.itemView.getContext().getResources().getIdentifier(
-              img, "drawable", holder.itemView.getContext().getPackageName());
-      if (resId != 0) {
-        Glide.with(holder.itemView.getContext())
-                .load(resId)
-                .centerCrop()
-                .placeholder(R.drawable.ic_cover)
-                .error(R.drawable.ic_cover)
-                .into(holder.getIvCover());
-      } else {
-        Glide.with(holder.itemView.getContext())
-                .load(img)
-                .centerCrop()
-                .placeholder(R.drawable.ic_cover)
-                .error(R.drawable.ic_cover)
-                .into(holder.getIvCover());
-      }
+      Glide.with(holder.itemView.getContext())
+              .load(img.trim())
+              .centerCrop()
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
+              .placeholder(R.drawable.ic_cover)
+              .error(R.drawable.ic_cover)
+              .into(holder.getIvCover());
     } else {
       holder.getIvCover().setImageResource(R.drawable.ic_cover);
     }
 
-    // Bấm vào xem chi tiết bài viết (mở ArticleDetailActivity)
+    // Bấm vào bài viết để mở màn hình chi tiết
     holder.itemView.setOnClickListener(v -> {
       Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
       intent.putExtra("article", currentArticle);

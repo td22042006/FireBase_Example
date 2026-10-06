@@ -9,14 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ArticleViewHolder extends RecyclerView.ViewHolder {
   private ImageView ivCover;
-  private TextView txtTitle, txtDescription;
+  private TextView txtId, txtTitle, txtDescription, txtViews;
   private ArticleViewAdapter adapter;
 
   public ArticleViewHolder(@NonNull View itemView, ArticleViewAdapter adapter) {
     super(itemView);
     ivCover = itemView.findViewById(R.id.ivCover);
+    txtId = itemView.findViewById(R.id.txt_id);
     txtTitle = itemView.findViewById(R.id.txt_title);
     txtDescription = itemView.findViewById(R.id.txt_description);
+    txtViews = itemView.findViewById(R.id.txt_views);
     this.adapter = adapter;
   }
 
@@ -24,23 +26,19 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
     return ivCover;
   }
 
-  public void setIvCover(ImageView ivCover) {
-    this.ivCover = ivCover;
+  public TextView getTxtId() {
+    return txtId;
   }
 
   public TextView getTxtTitle() {
     return txtTitle;
   }
 
-  public void setTxtTitle(TextView txtTitle) {
-    this.txtTitle = txtTitle;
-  }
-
   public TextView getTxtDescription() {
     return txtDescription;
   }
 
-  public void setTxtDescription(TextView txtDescription) {
-    this.txtDescription = txtDescription;
+  public TextView getTxtViews() {
+    return txtViews;
   }
 }
